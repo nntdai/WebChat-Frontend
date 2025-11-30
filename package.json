@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@nestjs/config": "^4.0.2",
+    "mongodb-driver": "^0.1.0",
+    "vue-router": "^4.0.13"
+  }
+}

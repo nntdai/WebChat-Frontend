@@ -1,0 +1,204 @@
+# ===========================================
+# WebChat Application - .gitignore
+# ===========================================
+
+# ===========================================
+# Dependencies
+# ===========================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Package manager files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.pnp.*
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.yarn-integrity
+
+# ===========================================
+# Environment Variables
+# ===========================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ===========================================
+# Build Outputs
+# ===========================================
+# Frontend (Vue.js)
+dist/
+dist-ssr/
+build/
+
+# Backend (NestJS)
+dist/
+build/
+
+# General build outputs
+*.tgz
+*.tar.gz
+out/
+.next/
+.nuxt/
+.vuepress/dist/
+storybook-static/
+
+# ===========================================
+# Cache & Temporary Files
+# ===========================================
+# Node.js cache
+.npm/
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+
+# Build tool caches
+.cache/
+.parcel-cache/
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+.fusebox/
+
+# Temporary directories
+tmp/
+temp/
+.tmp/
+.temp/
+*.tmp
+*.temp
+
+# ===========================================
+# Testing & Coverage
+# ===========================================
+coverage/
+.nyc_output/
+*.lcov
+lib-cov/
+
+# ===========================================
+# Logs
+# ===========================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ===========================================
+# Runtime Data
+# ===========================================
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# ===========================================
+# Database Files
+# ===========================================
+*.sqlite
+*.sqlite3
+*.db
+.dynamodb/
+
+# ===========================================
+# IDE & Editor Files
+# ===========================================
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Other editors
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ===========================================
+# Operating System Files
+# ===========================================
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# ===========================================
+# Docker & Deployment
+# ===========================================
+.dockerignore
+docker-compose.override.yml
+
+# ===========================================
+# Backup Files
+# ===========================================
+*.bak
+*.backup
+*.old
+
+# ===========================================
+# Project Specific
+# ===========================================
+# Local development files
+*.local
+
+# Serverless
+.serverless/
+
+# TernJS
+.tern-port
+
+# VSCode test
+.vscode-test
+
+# Node REPL history
+.node_repl_history
+
+# Lock files (keep package-lock.json for consistency)
+# Uncomment if you want to ignore lock files
+# package-lock.json
+# yarn.lock
