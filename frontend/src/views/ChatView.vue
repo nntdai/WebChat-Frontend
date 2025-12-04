@@ -65,7 +65,7 @@ const fetchConversations = async () => {
   try {
     const token = localStorage.getItem('access_token');
     const response = await fetch(
-      `http://localhost:3000/api/v1/chat/conversations?userId=${currentUserId.value}&limit=20`,
+      `/api/chat/conversations?userId=${currentUserId.value}&limit=20`,
       {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -94,7 +94,7 @@ const loadMessagesFromAPI = async (conversationId: string) => {
   try {
     const token = localStorage.getItem('access_token');
     const response = await fetch(
-      `http://localhost:3000/api/v1/chat/messages/${conversationId}?limit=50`,
+      `/api/chat/messages/${conversationId}?limit=50`,
       {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -206,7 +206,7 @@ const send = async () => {
       if (!recipientId.value && recipient.value) {
         // Search for user to get their ID
         const searchResponse = await fetch(
-          `http://localhost:3000/api/v1/users/search?q=${encodeURIComponent(recipient.value)}`,
+          `/api/users/search?q=${encodeURIComponent(recipient.value)}`,
           {
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -231,7 +231,7 @@ const send = async () => {
       // For new conversations, we need a different endpoint that accepts receiverId
       // Let's create a temporary conversation first by sending the receiverId
       // The server sendMessage will create the conversation
-      const createResponse = await fetch('http://localhost:3000/api/v1/chat/message-new', {
+      const createResponse = await fetch('/api/chat/message-new', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -275,7 +275,7 @@ const send = async () => {
       return;
     }
     
-    const response = await fetch('http://localhost:3000/api/v1/chat/message', {
+    const response = await fetch('/api/chat/message', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

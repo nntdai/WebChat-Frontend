@@ -74,11 +74,11 @@ const profileFormValid = computed(() => {
   if (!profileForm.value.username || !isValidUsername(profileForm.value.username)) {
     return false;
   }
-  
+
   // At least one of email or phone must be provided
   const hasEmail = profileForm.value.email && profileForm.value.email.trim().length > 0;
   const hasPhone = profileForm.value.phone && profileForm.value.phone.trim().length > 0;
-  
+
   if (!hasEmail && !hasPhone) {
     return false;
   }
@@ -122,7 +122,7 @@ const fetchUserProfile = async () => {
 
   try {
     const token = localStorage.getItem('access_token');
-    const response = await fetch('http://localhost:3000/api/v1/users/me/profile', {
+    const response = await fetch('/api/users/me/profile', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -163,19 +163,19 @@ const updateProfile = async () => {
 
   try {
     const token = localStorage.getItem('access_token');
-    
+
     // Build complete update data with all fields
     const updateData: any = {};
-    
+
     // Always send all fields so backend knows what to update/clear
     updateData.username = profileForm.value.username?.trim() || userProfile.value?.username;
     updateData.email = profileForm.value.email?.trim() || null;
     updateData.phone = profileForm.value.phone?.trim() || null;
     updateData.photo = profileForm.value.photo?.trim() || null;
     updateData.full_name = profileForm.value.full_name?.trim() || null;
-    
+
     // Check for changes
-    const hasChanges = 
+    const hasChanges =
       updateData.username !== userProfile.value?.username ||
       updateData.email !== userProfile.value?.email ||
       updateData.phone !== userProfile.value?.phone ||
@@ -194,7 +194,7 @@ const updateProfile = async () => {
       return;
     }
 
-    const response = await fetch('http://localhost:3000/api/v1/users/me/profile', {
+    const response = await fetch('/api/users/me/profile', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -206,17 +206,17 @@ const updateProfile = async () => {
     if (response.ok) {
       const result = await response.json();
       userProfile.value = result.data;
-      
+
       // Re-fetch profile to ensure we have the latest data from server
       await fetchUserProfile();
-      
+
       profileSuccess.value = 'Profile updated successfully';
-      
+
       // Update username in localStorage if changed
       if (updateData.username) {
         localStorage.setItem('username', updateData.username);
       }
-      
+
       setTimeout(() => {
         profileSuccess.value = '';
       }, 3000);
@@ -256,8 +256,8 @@ const changePassword = async () => {
       currentPassword: String(passwordForm.value.currentPassword || '').trim(),
       newPassword: String(passwordForm.value.newPassword || '').trim(),
     };
-    
-    const response = await fetch('http://localhost:3000/api/v1/users/change-password', {
+
+    const response = await fetch('/api/users/change-password', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -268,7 +268,7 @@ const changePassword = async () => {
 
     if (response.ok) {
       passwordSuccess.value = 'Password changed successfully';
-      
+
       // Clear password form
       passwordForm.value = {
         currentPassword: '',
@@ -307,16 +307,10 @@ onMounted(() => {
 
       <!-- Tabs -->
       <div class="tabs">
-        <button
-          :class="['tab', { active: activeTab === 'profile' }]"
-          @click="activeTab = 'profile'"
-        >
+        <button :class="['tab', { active: activeTab === 'profile' }]" @click="activeTab = 'profile'">
           👤 Profile
         </button>
-        <button
-          :class="['tab', { active: activeTab === 'password' }]"
-          @click="activeTab = 'password'"
-        >
+        <button :class="['tab', { active: activeTab === 'password' }]" @click="activeTab = 'password'">
           🔒 Password
         </button>
       </div>
@@ -333,12 +327,8 @@ onMounted(() => {
           <!-- Profile Picture -->
           <div class="profile-picture-section">
             <div class="avatar-preview">
-              <img
-                v-if="profileForm.photo"
-                :src="profileForm.photo"
-                :alt="profileForm.username"
-                @error="profileForm.photo = ''"
-              />
+              <img v-if="profileForm.photo" :src="profileForm.photo" :alt="profileForm.username"
+                @error="profileForm.photo = ''" />
               <div v-else class="avatar-placeholder">{{ userInitials }}</div>
             </div>
           </div>
@@ -346,14 +336,9 @@ onMounted(() => {
           <!-- Profile Photo URL -->
           <div class="form-group">
             <label for="photo">Profile Picture URL</label>
-            <input
-              id="photo"
-              v-model="profileForm.photo"
-              type="text"
-              placeholder="https://example.com/photo.jpg"
+            <input id="photo" v-model="profileForm.photo" type="text" placeholder="https://example.com/photo.jpg"
               :disabled="isLoading"
-              :class="{ 'input-error': profileForm.photo && !isValidPhotoUrl(profileForm.photo) }"
-            />
+              :class="{ 'input-error': profileForm.photo && !isValidPhotoUrl(profileForm.photo) }" />
             <span v-if="profileForm.photo && !isValidPhotoUrl(profileForm.photo)" class="error-text">
               Must be a valid image URL (jpg, jpeg, png, gif, webp)
             </span>
@@ -362,13 +347,8 @@ onMounted(() => {
           <!-- Full Name -->
           <div class="form-group">
             <label for="full_name">Full Name</label>
-            <input
-              id="full_name"
-              v-model="profileForm.full_name"
-              type="text"
-              placeholder="Enter your full name"
-              :disabled="isLoading"
-            />
+            <input id="full_name" v-model="profileForm.full_name" type="text" placeholder="Enter your full name"
+              :disabled="isLoading" />
           </div>
 
           <!-- Username (Required) -->
@@ -376,15 +356,9 @@ onMounted(() => {
             <label for="username">
               Username <span class="required">*</span>
             </label>
-            <input
-              id="username"
-              v-model="profileForm.username"
-              type="text"
-              placeholder="Enter username"
-              required
+            <input id="username" v-model="profileForm.username" type="text" placeholder="Enter username" required
               :disabled="isLoading"
-              :class="{ 'input-error': profileForm.username && !isValidUsername(profileForm.username) }"
-            />
+              :class="{ 'input-error': profileForm.username && !isValidUsername(profileForm.username) }" />
             <span v-if="profileForm.username && !isValidUsername(profileForm.username)" class="error-text">
               Username must be alphanumeric with underscores (max 50 chars)
             </span>
@@ -396,14 +370,8 @@ onMounted(() => {
               Email
               <span class="hint">(At least one: Email or Phone)</span>
             </label>
-            <input
-              id="email"
-              v-model="profileForm.email"
-              type="email"
-              placeholder="email@example.com"
-              :disabled="isLoading"
-              :class="{ 'input-error': profileForm.email && !isValidEmail(profileForm.email) }"
-            />
+            <input id="email" v-model="profileForm.email" type="email" placeholder="email@example.com"
+              :disabled="isLoading" :class="{ 'input-error': profileForm.email && !isValidEmail(profileForm.email) }" />
             <span v-if="profileForm.email && !isValidEmail(profileForm.email)" class="error-text">
               Must be a valid email address
             </span>
@@ -415,14 +383,8 @@ onMounted(() => {
               Phone Number
               <span class="hint">(At least one: Email or Phone)</span>
             </label>
-            <input
-              id="phone"
-              v-model="profileForm.phone"
-              type="tel"
-              placeholder="+84901234567"
-              :disabled="isLoading"
-              :class="{ 'input-error': profileForm.phone && !isValidPhone(profileForm.phone) }"
-            />
+            <input id="phone" v-model="profileForm.phone" type="tel" placeholder="+84901234567" :disabled="isLoading"
+              :class="{ 'input-error': profileForm.phone && !isValidPhone(profileForm.phone) }" />
             <span v-if="profileForm.phone && !isValidPhone(profileForm.phone)" class="error-text">
               Must be in international format (e.g., +84901234567)
             </span>
@@ -436,11 +398,7 @@ onMounted(() => {
           <div v-if="profileSuccess" class="alert alert-success">{{ profileSuccess }}</div>
 
           <!-- Submit Button -->
-          <button
-            type="submit"
-            class="btn-primary"
-            :disabled="!profileFormValid || isSaving"
-          >
+          <button type="submit" class="btn-primary" :disabled="!profileFormValid || isSaving">
             {{ isSaving ? 'Saving...' : 'Save Changes' }}
           </button>
         </form>
@@ -455,18 +413,9 @@ onMounted(() => {
               Current Password <span class="required">*</span>
             </label>
             <div class="password-input-wrapper">
-              <input
-                id="currentPassword"
-                v-model="passwordForm.currentPassword"
-                :type="showCurrentPassword ? 'text' : 'password'"
-                placeholder="Enter current password"
-                required
-              />
-              <button
-                type="button"
-                class="toggle-password"
-                @click="showCurrentPassword = !showCurrentPassword"
-              >
+              <input id="currentPassword" v-model="passwordForm.currentPassword"
+                :type="showCurrentPassword ? 'text' : 'password'" placeholder="Enter current password" required />
+              <button type="button" class="toggle-password" @click="showCurrentPassword = !showCurrentPassword">
                 {{ showCurrentPassword ? '👁️' : '👁️‍🗨️' }}
               </button>
             </div>
@@ -478,19 +427,10 @@ onMounted(() => {
               New Password <span class="required">*</span>
             </label>
             <div class="password-input-wrapper">
-              <input
-                id="newPassword"
-                v-model="passwordForm.newPassword"
-                :type="showNewPassword ? 'text' : 'password'"
-                placeholder="Enter new password (min 8 characters)"
-                required
-                :class="{ 'input-error': passwordForm.newPassword && passwordForm.newPassword.length < 8 }"
-              />
-              <button
-                type="button"
-                class="toggle-password"
-                @click="showNewPassword = !showNewPassword"
-              >
+              <input id="newPassword" v-model="passwordForm.newPassword" :type="showNewPassword ? 'text' : 'password'"
+                placeholder="Enter new password (min 8 characters)" required
+                :class="{ 'input-error': passwordForm.newPassword && passwordForm.newPassword.length < 8 }" />
+              <button type="button" class="toggle-password" @click="showNewPassword = !showNewPassword">
                 {{ showNewPassword ? '👁️' : '👁️‍🗨️' }}
               </button>
             </div>
@@ -504,11 +444,7 @@ onMounted(() => {
           <div v-if="passwordSuccess" class="alert alert-success">{{ passwordSuccess }}</div>
 
           <!-- Submit Button -->
-          <button
-            type="submit"
-            class="btn-primary"
-            :disabled="!passwordFormValid || isSaving"
-          >
+          <button type="submit" class="btn-primary" :disabled="!passwordFormValid || isSaving">
             {{ isSaving ? 'Changing...' : 'Change Password' }}
           </button>
         </form>
@@ -537,6 +473,7 @@ onMounted(() => {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -558,6 +495,7 @@ onMounted(() => {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -841,4 +779,3 @@ onMounted(() => {
   background: #9ca3af;
 }
 </style>
-

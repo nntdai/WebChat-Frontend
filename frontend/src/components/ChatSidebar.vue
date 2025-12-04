@@ -88,7 +88,7 @@ const conversations = computed(() => {
   props.messages.forEach((msg) => {
     // Determine the other person in the conversation
     const otherUser = msg.from === props.currentUser ? msg.to : msg.from;
-    
+
     const existing = conversationMap.get(otherUser);
     const msgTime = new Date(msg.timestamp);
 
@@ -145,15 +145,15 @@ const searchUsers = async () => {
 
   try {
     const token = localStorage.getItem('access_token');
-    
+
     if (!token || token === 'undefined' || token === 'null') {
       searchResults.value = [];
       isSearching.value = false;
       return;
     }
-    
+
     const response = await fetch(
-      `http://localhost:3000/api/v1/users/search?q=${encodeURIComponent(searchQuery.value)}`,
+      `/api/users/search?q=${encodeURIComponent(searchQuery.value)}`,
       {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -216,7 +216,7 @@ const startChatWithUser = (user: User) => {
               <span class="avatar-text">{{ userInitials }}</span>
               <span :class="['status-indicator', isConnected ? 'connected' : 'disconnected']"></span>
             </button>
-            
+
             <!-- Profile Dropdown -->
             <div v-if="showProfileDropdown" class="dropdown-menu">
               <div class="dropdown-header">
@@ -229,16 +229,16 @@ const startChatWithUser = (user: User) => {
                   </div>
                 </div>
               </div>
-              
+
               <div class="dropdown-divider"></div>
-              
+
               <button @click="emit('goToProfile')" class="dropdown-item">
                 <span class="item-icon">👤</span>
                 <span>Profile Settings</span>
               </button>
-              
+
               <div class="dropdown-divider"></div>
-              
+
               <button @click="emit('logout')" class="dropdown-item logout">
                 <span class="item-icon">🚪</span>
                 <span>Logout</span>
@@ -252,19 +252,9 @@ const startChatWithUser = (user: User) => {
       <div class="search-container">
         <div class="search-input-wrapper">
           <span class="search-icon">🔍</span>
-          <input
-            v-model="searchQuery"
-            @input="handleSearchInput"
-            type="text"
-            placeholder="Search users..."
-            class="search-input"
-          />
-          <button
-            v-if="searchQuery"
-            @click="clearSearch"
-            class="clear-search-btn"
-            title="Clear search"
-          >
+          <input v-model="searchQuery" @input="handleSearchInput" type="text" placeholder="Search users..."
+            class="search-input" />
+          <button v-if="searchQuery" @click="clearSearch" class="clear-search-btn" title="Clear search">
             ✕
           </button>
         </div>
@@ -278,12 +268,8 @@ const startChatWithUser = (user: User) => {
             <span>No users found</span>
           </div>
           <div v-else class="results-list">
-            <div
-              v-for="user in searchResults"
-              :key="user._id"
-              class="search-result-item"
-              @click="startChatWithUser(user)"
-            >
+            <div v-for="user in searchResults" :key="user._id" class="search-result-item"
+              @click="startChatWithUser(user)">
               <div class="result-avatar">
                 {{ user.username.charAt(0).toUpperCase() }}
               </div>
@@ -301,12 +287,9 @@ const startChatWithUser = (user: User) => {
 
     <!-- Conversations List -->
     <div class="conversations-list">
-      <div
-        v-for="conv in conversations"
-        :key="conv.username"
+      <div v-for="conv in conversations" :key="conv.username"
         :class="['conversation-item', { active: conv.username === activeRecipient }]"
-        @click="selectConversation(conv.username)"
-      >
+        @click="selectConversation(conv.username)">
         <div class="conversation-avatar">
           {{ conv.username.charAt(0).toUpperCase() }}
         </div>
@@ -455,6 +438,7 @@ const startChatWithUser = (user: User) => {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -656,8 +640,15 @@ const startChatWithUser = (user: User) => {
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .results-list {
